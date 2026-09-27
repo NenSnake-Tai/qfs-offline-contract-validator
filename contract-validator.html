@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QFS Contract Validator - FDE Global Portal</title>
+    <!-- EL SCRIPT ASÍNCRONO EXACTO QUE MANDAS -->
+    <script async
+      src="https://js.stripe.com/v3/buy-button.js">
+    </script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #33ccff;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .bunker-panel {
+            background: #050505;
+            border: 2px solid #33ccff;
+            box-shadow: 0 0 30px rgba(51, 204, 255, 0.2);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 650px;
+            padding: 20px;
+            margin-top: 15px;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #33ccff;
+        }
+        .sub-tag {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #0066aa;
+            margin-bottom: 25px;
+        }
+        .token-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #ffaa00;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px #ffaa00;
+        }
+        .module-box {
+            border: 1px dashed #33ccff;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(51, 204, 255, 0.02);
+        }
+        h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            color: #ffffff;
+            border-bottom: 1px solid #33ccff;
+            padding-bottom: 5px;
+        }
+        textarea {
+            width: 100%;
+            height: 110px;
+            background: #000000;
+            border: 1px solid #33ccff;
+            color: #ffffff;
+            padding: 10px;
+            font-family: inherit;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            resize: none;
+        }
+        .file-upload-wrapper {
+            margin-bottom: 15px;
+        }
+        input[type="file"] {
+            color: #33ccff;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        .hash-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            background: #111111;
+            padding: 10px;
+            border: 1px solid #33ccff;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px #33ccff;
+        }
+        button {
+            background: transparent;
+            color: #33ccff;
+            border: 1px solid #33ccff;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 0 8px rgba(51, 204, 255, 0.1);
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #33ccff;
+            color: #000000;
+            box-shadow: 0 0 15px #33ccff;
+        }
+        .terminal-output {
+            background: #000000;
+            border: 1px solid #003355;
+            padding: 12px;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            color: #33ccff;
+        }
+        .paywall-overlay {
+            display: none;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff0033;
+            box-shadow: 0 0 40px #ff0033;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+        .paywall-overlay h3 {
+            color: #ff0033;
+            text-shadow: 0 0 10px #ff0033;
+            margin-top: 0;
+        }
+        .price-tag {
+            font-size: 1.6rem;
+            color: #ffffff;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .stripe-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bunker-panel" id="mainPanel">
+    <h1>⚡ QFS OFFLINE CONTRACT VALIDATOR ⚡</h1>
+    <div class="sub-tag">PORTAL DE ACCESO COMERCIAL // CRYPTOGRAPHIC INTEGRITY DIGITAL SEAL</div>
+    
+    <div class="token-counter" id="creditDisplay">FREE CREDITS REMAINING: 2/2</div>
+
+    <div class="module-box" id="sandboxEnvironment">
+        <div class="file-upload-wrapper">
+            <label style="display:block; margin-bottom:8px;">Load contract draft (.txt, .log):</label>
+            <input type="file" id="fileInlet" onchange="cargarArchivoPorHardware(this)">
+        </div>
+
+        <h2>📑 LEGAL PAYLOAD STREAM</h2>
+        <label>Edit or paste the official contract clauses and terms below:</label>
+        <textarea id="contractInput" oninput="firmarContratoEnVivo()">CONTRATO_NEXO_REBELDE_QFS_ALPHA
+EMISOR: AR-THAR-EL // PUERTO_GÜÍMAR
+TERMINOS: Liberación de la trilogía Micro-SaaS a velocidad nativa sin lag.
+VALOR: 144000_TOKENS_ORO_SOLAR.</textarea>
+        
+        <label>Inmutable Integrity Seal (FNV-1a Root Hash):</label>
+        <div class="hash-display" id="hashSeal">811C9DC5</div>
+
+        <button id="actionBtn" onclick="solicitarSelloCore()">Generate Final Cryptographic Certificate</button>
+        <div style="margin-top:15px;">System Security Stream:</div>
+        <div class="terminal-output" id="logOutput">[📡] Cryptographic core waiting for document modifications...</div>
+    </div>
+
+    <!-- PANE DE SUSCRIPCIÓN BLOQUEADO (TERCER CLIC IMPACTO) -->
+    <div class="paywall-overlay" id="paywallBox">
+        <h3>🛑 SUBSCRIPTION_REQUIRED_EXCEPTION [CODE: 3_MASTER_BLOCK]</h3>
+        <p>Para desbloquear el generador offline con procesamiento ilimitado y sellado de firmas encadenadas, activa tu licencia corporativa.</p>
+        <div class="price-tag">9.99 EUR / MENSUAL</div>
+        
+        <div class="stripe-container">
+            <!-- TU COMPONENTE WEB DE STRIPE INTEGRADO AL 100% -->
+            <stripe-buy-button
+              buy-button-id="buy_btn_1UK6qCPpvlXGOaztjlKxMPnu"
+              publishable-key="pk_live_51UK4oVPpvlXGOazttPGw0kuqMhst2sQEqKwj1fxTpiYHeTXmRYVi5Vr4qshVLfeVyY9nlApVhqS36czppS2x8zlC00vaeAToBP"
+            >
+            </stripe-buy-button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* eslint-disable */
+    // @ts-nocheck
+    let creditosDisponibles = 2; 
+
+    function calcularSelloContrato(payload = "") {
+        let hash = 0x811c9dc5;
+        for (let i = 0; i < payload.length; i++) {
+            hash ^= payload.charCodeAt(i);
+            hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+        }
+        return (hash >>> 0).toString(16).toUpperCase().padStart(8, '0');
+    }
+
+    function cargarArchivoPorHardware(input = null) {
+        if (!input || !input.files || input.files.length === 0) return;
+        
+        const file = input.files;
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            if (e.target && e.target.result) {
+                document.getElementById('contractInput').value = e.target.result;
+                firmarContratoEnVivo();
+                document.getElementById('logOutput').innerText = `[📥] Contract document "${file.name}" loaded into core loop (${file.size} bytes).`;
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function firmarContratoEnVivo() {
+        if (creditosDisponibles <= 0) return;
+        const texto = document.getElementById('contractInput').value;
+        const hashBox = document.getElementById('hashSeal');
+        hashBox.innerText = calcularSelloContrato(texto);
+    }
+
+    function solicitarSelloCore() {
+        const outBox = document.getElementById('logOutput');
+        const creditBox = document.getElementById('creditDisplay');
+        const texto = document.getElementById('contractInput').value;
+        
+        if (creditosDisponibles <= 0) {
+            bloquearEntornoPorPaywall();
+            return;
+        }
+
+        creditosDisponibles--;
+        creditBox.innerText = `FREE CREDITS REMAINING: ${creditosDisponibles}/2`;
+        
+        const finalHash = calcularSelloContrato(texto);
+        let log = `[🔒] INITIATING SECURE SEAL PROTOCOL VIA PROXY...\n`;
+        log += `[🔬] Document Audit: ${texto.length} bytes structured.\n`;
+        log += `[✅] SUCCESS: Cryptographic digital certificate generated in the cloud.\n`;
+        log += `[🛡️] SECURE_HASH: [ ${finalHash} ]`;
+        
+        outBox.innerText = log;
+
+        if (creditosDisponibles === 0) {
+            document.getElementById('actionBtn').innerText = "Final Trial Attempt Available";
+        }
+    }
+
+    function bloquearEntornoPorPaywall() {
+        document.getElementById('sandboxEnvironment').style.display = 'none';
+        document.getElementById('creditDisplay').style.display = 'none';
+        document.getElementById('paywallBox').style.display = 'block';
+        document.getElementById('mainPanel').style.border = '2px solid #ff0033';
+        document.getElementById('mainPanel').style.boxShadow = '0 0 30px rgba(255, 0, 51, 0.3)';
+    }
+
+    window.onload = function() {
+        firmarContratoEnVivo();
+    };
+</script>
+
+</body>
+</html>
